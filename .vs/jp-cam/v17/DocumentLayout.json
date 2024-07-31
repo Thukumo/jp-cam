@@ -1,9 +1,13 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\hoge\\Documents\\playground\\jp-cam\\",
+  "WorkspaceRootPath": "C:\\Users\\hoge\\Documents\\projects\\jp-cam\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6FF7D451-64E5-4B94-B12E-6DF90161B9C2}|jp-cam.csproj|c:\\users\\hoge\\documents\\playground\\jp-cam\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{6FF7D451-64E5-4B94-B12E-6DF90161B9C2}|jp-cam.csproj|c:\\users\\hoge\\documents\\projects\\jp-cam\\jp-cam.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{6FF7D451-64E5-4B94-B12E-6DF90161B9C2}|jp-cam.csproj|solutionrelative:jp-cam.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6FF7D451-64E5-4B94-B12E-6DF90161B9C2}|jp-cam.csproj|c:\\users\\hoge\\documents\\projects\\jp-cam\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6FF7D451-64E5-4B94-B12E-6DF90161B9C2}|jp-cam.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -14,21 +18,30 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "jp-cam",
+              "DocumentMoniker": "C:\\Users\\hoge\\Documents\\projects\\jp-cam\\jp-cam.csproj",
+              "RelativeDocumentMoniker": "jp-cam.csproj",
+              "ToolTip": "C:\\Users\\hoge\\Documents\\projects\\jp-cam\\jp-cam.csproj",
+              "RelativeToolTip": "jp-cam.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-07-31T12:02:26.157Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\hoge\\Documents\\playground\\jp-cam\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\hoge\\Documents\\projects\\jp-cam\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\hoge\\Documents\\playground\\jp-cam\\Program.cs",
+              "ToolTip": "C:\\Users\\hoge\\Documents\\projects\\jp-cam\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABwAAABmAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-30T12:19:42.241Z",
               "EditorCaption": ""
