@@ -6,5 +6,6 @@
     <RootNamespace>jp_cam</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Optimize>true</Optimize>
   </PropertyGroup>
 </Project>

@@ -2,49 +2,48 @@ import requests, ipaddress
 
 def isvailed(s):
     try:
-        #return ipaddress.ip_address(s).version == 4
         ipaddress.IPv4Network(s)
         return True
     except Exception:
         return False
 
-def b(url):
-    return [[ip.split("/")[0], str(ipaddress.IPv4Address(ip.split("/")[0])+ipaddress.IPv4Network(ip).num_addresses)] for ip in [c.strip() for c in requests.get(url, headers={"User-Agent": "testBot"}).text.split("\n") if isvailed(c.strip())]]
-
 code_str = "using System.Net;\n\
 namespace jp_cam\n\
 {\n\
     internal class Tools\n\
-    {\n"
-
-li = []
-lis_alphabet = "abcdefghijklmnopqrstuvwxyz"
-b("https://ipv4.fetus.jp/jp.txt")
-if len(li) == 0: exit()
-code_str += f"        public static (uint Start, uint End)[] jp_addr_block = \n"
-code_str += "        [\n"
-code_str += f'            (ToUInt("{li[0][0]}"), ToUInt("{li[0][1]}"))'
-li.remove(li[0])
-for l in li:
-    code_str += ",\n"
-    code_str += f'            (ToUInt("{l[0]}"), ToUInt("{l[1]}"))'
-code_str += "\n\
-        ];\n\
+    {\n\
+        public static readonly Dictionary<string, (uint Start, uint End)[]> addr_blocks = new()\n\
+        {\n"
+countrys = list(map(lambda x: x.lower(), ["jp"])) #えらいので入力の正規化
+for country in countrys:
+    li = [[ip.split("/")[0], str(ipaddress.IPv4Address(ip.split("/")[0])+ipaddress.IPv4Network(ip).num_addresses)] for ip in [c.strip() for c in requests.get(f"https://ipv4.fetus.jp/{country}.txt", headers={"User-Agent": "testBot"}).text.split("\n") if isvailed(c.strip())]]
+    if len(li) == 0: continue
+    code_str += "            {\""+country+"\", \n"
+    code_str += "            new (uint, uint)[]{\n"
+    code_str += f'                (ToUInt("{li[0][0]}"), ToUInt("{li[0][1]}"))'
+    li.remove(li[0])
+    for l in li:
+        code_str += ",\n"
+        code_str += f'                (ToUInt("{l[0]}"), ToUInt("{l[1]}"))'
+    code_str += "\n\
+                }\n\
+            }\n"
+code_str += "\
+        };\n\
         public static uint ToUInt(string ip)\n\
         {\n\
             byte[] bip = IPAddress.Parse(ip).GetAddressBytes();\n\
             Array.Reverse(bip);\n\
             return BitConverter.ToUInt32(bip, 0);\n\
         }\n\
-        public static bool IsJapaneseIP(string ip_str)\n\
+        public static bool IsIpInCountry(string ip_str, string country)\n\
         {\n\
             uint ip_num = ToUInt(ip_str);\n\
-            foreach (var (Start, End) in jp_addr_block) if(Start <= ip_num && ip_num <= End) return true;\n\
+            foreach (var (Start, End) in addr_blocks[country]) if(Start <= ip_num && ip_num <= End) return true;\n\
             return false;\n\
         }\n\
     }\n\
 }\n"
-#print(code_str)
 with open("tools.cs", "w", encoding="UTF-8") as f:
     f.write(code_str)
 print("len: "+str(len(li)))

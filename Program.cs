@@ -17,7 +17,7 @@ namespace jp_cam
                 case 192 when b == 168:
                     return false;
                 default:
-                    return a < 224 && Tools.IsJapaneseIP(ip);
+                    return a < 224 && Tools.IsIpInCountry(ip, "jp");
             }
         }
         public static async Task<string> IsConnectableAsync(string ip, int port, int timeout, bool tcp, bool ignore_err)
