@@ -1,27 +1,25 @@
 import requests, ipaddress
-from bs4 import BeautifulSoup
 
 def isvailed(s):
     try:
-        return ipaddress.ip_address(s).version == 4
+        #return ipaddress.ip_address(s).version == 4
+        ipaddress.IPv4Network(s)
+        return True
     except Exception:
         return False
-def a(url):
-    tmp = [c.strip() for c in BeautifulSoup(requests.get(url).text, "html.parser").select_one("#primaryContent > table").text.split("\n") if isvailed(c.strip())]
-    lis = []
-    if len(tmp)%2 != 0:
-        print("Error")
-        exit()
-    for i in range(0, len(tmp), 2):
-        lis.append([tmp[i], tmp[i+1]])
-    return lis
+
+def b(url):
+    return [[ip.split("/")[0], str(ipaddress.IPv4Address(ip.split("/")[0])+ipaddress.IPv4Network(ip).num_addresses)] for ip in [c.strip() for c in requests.get(url, headers={"User-Agent": "testBot"}).text.split("\n") if isvailed(c.strip())]]
 
 code_str = "using System.Net;\n\
 namespace jp_cam\n\
 {\n\
     internal class Tools\n\
     {\n"
-li = a("https://www.nic.ad.jp/ja/dns/jp-addr-block.html") + a("https://www.nic.ad.jp/ja/dns/ap-addr-block.html")
+
+li = []
+lis_alphabet = "abcdefghijklmnopqrstuvwxyz"
+b("https://ipv4.fetus.jp/jp.txt")
 if len(li) == 0: exit()
 code_str += f"        public static (uint Start, uint End)[] jp_addr_block = \n"
 code_str += "        [\n"
