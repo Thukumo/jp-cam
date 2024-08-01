@@ -20,34 +20,33 @@ code_str = "using System.Net;\n\
 namespace jp_cam\n\
 {\n\
     internal class Tools\n\
-    {\n\
-        public static bool IsIpBetween(string ip1, string ip2, uint ntargetIp)\n\
-        {\n\
-            byte[] bip1 = IPAddress.Parse(ip1).GetAddressBytes();\n\
-            Array.Reverse(bip1);\n\
-            uint nip1 = BitConverter.ToUInt32(bip1, 0);\n\
-            byte[] bip2 = IPAddress.Parse(ip2).GetAddressBytes();\n\
-            Array.Reverse(bip2);\n\
-            uint nip2 = BitConverter.ToUInt32(bip2, 0);\n\
-            return nip1 <= ntargetIp && ntargetIp <= nip2;\n\
-        }\n\
-        public static bool IsJapaneseIP(string ip_str)\n\
-        {\n"
+    {\n"
 li = a("https://www.nic.ad.jp/ja/dns/jp-addr-block.html") + a("https://www.nic.ad.jp/ja/dns/ap-addr-block.html")
 if len(li) == 0: exit()
-code_str += "            byte[] ip_b = IPAddress.Parse(ip_str).GetAddressBytes();\n"
-code_str += "            Array.Reverse(ip_b);\n"
-code_str += "            uint ip_num = BitConverter.ToUInt32(ip_b, 0);\n"
-code_str += f'            return IsIpBetween("{li[0][0]}", "{li[0][1]}", ip_num)'
+code_str += f"        public static (uint Start, uint End)[] jp_addr_block = \n"
+code_str += "        [\n"
+code_str += f'            (ToUInt("{li[0][0]}"), ToUInt("{li[0][1]}"))'
 li.remove(li[0])
 for l in li:
-    code_str += f' || IsIpBetween("{l[0]}", "{l[1]}", ip_num)'
-code_str += ";\n"
-code_str += "\
+    code_str += ",\n"
+    code_str += f'            (ToUInt("{l[0]}"), ToUInt("{l[1]}"))'
+code_str += "\n\
+        ];\n\
+        public static uint ToUInt(string ip)\n\
+        {\n\
+            byte[] bip = IPAddress.Parse(ip).GetAddressBytes();\n\
+            Array.Reverse(bip);\n\
+            return BitConverter.ToUInt32(bip, 0);\n\
+        }\n\
+        public static bool IsJapaneseIP(string ip_str)\n\
+        {\n\
+            uint ip_num = ToUInt(ip_str);\n\
+            foreach (var (Start, End) in jp_addr_block) if(Start <= ip_num && ip_num <= End) return true;\n\
+            return false;\n\
         }\n\
     }\n\
 }\n"
-print(code_str)
-with open("jpip.cs", "w", encoding="UTF-8") as f:
+#print(code_str)
+with open("tools.cs", "w", encoding="UTF-8") as f:
     f.write(code_str)
 print("len: "+str(len(li)))

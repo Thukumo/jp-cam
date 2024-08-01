@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("jp-cam")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7a285678c85850a58298ef5035c9c0e4217e0ea7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bedb24af94a896f05647a6a67ae604e7c52bb449")]
 [assembly: System.Reflection.AssemblyProductAttribute("jp-cam")]
 [assembly: System.Reflection.AssemblyTitleAttribute("jp-cam")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
