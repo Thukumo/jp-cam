@@ -19,12 +19,13 @@ for country in countrys:
     li = [[ip.split("/")[0], str(ipaddress.IPv4Address(ip.split("/")[0])+ipaddress.IPv4Network(ip).num_addresses)] for ip in [c.strip() for c in requests.get(f"https://ipv4.fetus.jp/{country}.txt", headers={"User-Agent": "testBot"}).text.split("\n") if isvailed(c.strip())]]
     if len(li) == 0: continue
     code_str += "            {\""+country+"\", \n"
-    code_str += "            new (uint, uint)[]{\n"
-    code_str += f'                (IpSToUInt("{li[0][0]}"), IpSToUInt("{li[0][1]}"))'
+    code_str += "            new (uint, uint)[]\n\
+            {\n"
+    code_str += f'                    (IpSToUInt("{li[0][0]}"), IpSToUInt("{li[0][1]}"))'
     li.remove(li[0])
     for l in li:
         code_str += ",\n"
-        code_str += f'                (IpSToUInt("{l[0]}"), IpSToUInt("{l[1]}"))'
+        code_str += f'                    (IpSToUInt("{l[0]}"), IpSToUInt("{l[1]}"))'
     code_str += "\n\
                 }\n\
             }\n"
@@ -47,6 +48,12 @@ code_str += "\
             uint ip_num = IpSToUInt(ip_str);\n\
             foreach (var (Start, End) in addr_blocks[country]) if(Start <= ip_num && ip_num <= End) return true;\n\
             return false;\n\
+        }\n\
+        public static string GetCountryByIpS(string ip)\n\
+        {\n\
+            uint ip_num = IpSToUInt(ip);\n\
+            foreach(var key in addr_blocks.Keys) foreach(var (Start, End) in addr_blocks[key]) if(Start <= ip_num && ip_num <= End) return key;\n\
+            throw new ArgumentException(ip+\" does not match any country in the data.\");\n\
         }\n\
     }\n\
 }\n"
