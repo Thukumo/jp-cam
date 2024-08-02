@@ -20,25 +20,31 @@ for country in countrys:
     if len(li) == 0: continue
     code_str += "            {\""+country+"\", \n"
     code_str += "            new (uint, uint)[]{\n"
-    code_str += f'                (ToUInt("{li[0][0]}"), ToUInt("{li[0][1]}"))'
+    code_str += f'                (IpSToUInt("{li[0][0]}"), IpSToUInt("{li[0][1]}"))'
     li.remove(li[0])
     for l in li:
         code_str += ",\n"
-        code_str += f'                (ToUInt("{l[0]}"), ToUInt("{l[1]}"))'
+        code_str += f'                (IpSToUInt("{l[0]}"), IpSToUInt("{l[1]}"))'
     code_str += "\n\
                 }\n\
             }\n"
 code_str += "\
         };\n\
-        public static uint ToUInt(string ip)\n\
+        public static uint IpSToUInt(string ip)\n\
         {\n\
             byte[] bip = IPAddress.Parse(ip).GetAddressBytes();\n\
             Array.Reverse(bip);\n\
             return BitConverter.ToUInt32(bip, 0);\n\
         }\n\
+        public static IPAddress UIntToIp(uint ip)\n\
+        {\n\
+            byte[] bytes = BitConverter.GetBytes(ip);\n\
+            Array.Reverse(bytes);\n\
+            return new IPAddress(bytes);\n\
+        }\n\
         public static bool IsIpInCountry(string ip_str, string country)\n\
         {\n\
-            uint ip_num = ToUInt(ip_str);\n\
+            uint ip_num = IpSToUInt(ip_str);\n\
             foreach (var (Start, End) in addr_blocks[country]) if(Start <= ip_num && ip_num <= End) return true;\n\
             return false;\n\
         }\n\

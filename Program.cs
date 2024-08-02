@@ -5,21 +5,6 @@ namespace jp_cam
 {
     internal class Program
     {
-        public static bool IsValidGlovalIP(int a, int b, string ip)
-        {
-            switch (a)
-            {
-                case 0:
-                case 10:
-                case 127:
-                case 169 when b == 254:
-                case 172 when 16 <= b && b <= 31:
-                case 192 when b == 168:
-                    return false;
-                default:
-                    return a < 224 && Tools.IsIpInCountry(ip, "jp");
-            }
-        }
         public static async Task<string> IsConnectableAsync(string ip, int port, int timeout, bool tcp, bool ignore_err)
         {
             Socket? socket = null;
@@ -86,15 +71,25 @@ namespace jp_cam
             Console.Error.WriteLine("Timeout: " + timeout);
             Console.Error.WriteLine("Protocol: " + (tcp? "TCP": "HTTP"));
             Console.Error.WriteLine("Ignore Error: " + ignore_err);
-            int[] arr = Enumerable.Range(0, 256).ToArray();
             Random random = new();
-            Parallel.ForEach(arr.OrderBy(x => new Random().Next()), (i) =>
+            string country = "jp";
+            Parallel.ForEach(Tools.addr_blocks[country].OrderBy(x => random.Next()), (i) =>
             {
                 List<Task<string>> tasks = [];
-                string ip;
-                foreach(int j in arr.OrderBy(x => random.Next())) foreach(int k in arr.OrderBy(x => random.Next()))
+                for(uint j = 0; j < (i.End-i.Start)/256; j++)
                 {
-                    for(int l = 0; l < 256; l++) if(IsValidGlovalIP(i, j, ip = $"{i}.{j}.{k}.{l}")) tasks.Add(IsConnectableAsync(ip, port, timeout, tcp, ignore_err));
+                    for(uint k = 0; k < 256; k++) tasks.Add(IsConnectableAsync(Tools.UIntToIp(i.Start+256*j+k).ToString(), port, timeout, tcp, ignore_err));
+                    Task.WhenAll(tasks).Wait();
+                    foreach(Task<string> task in tasks) if(task.Result != "")
+                    {
+                        Console.WriteLine(task.Result);
+                        Console.Error.WriteLine(task.Result);
+                    }
+                    tasks.Clear();
+                }
+                for(uint j = 0; j < (i.End-i.Start)%256; j++)
+                {
+                    tasks.Add(IsConnectableAsync(Tools.UIntToIp(i.End-(i.End-i.Start)%256+j).ToString(), port, timeout, tcp, ignore_err));
                     Task.WhenAll(tasks).Wait();
                     foreach(Task<string> task in tasks) if(task.Result != "")
                     {
